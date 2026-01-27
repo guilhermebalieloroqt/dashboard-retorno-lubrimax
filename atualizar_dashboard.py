@@ -63,7 +63,15 @@ def git_commit_push():
     # Commit
     mensagem = f"Auto-update: dados atualizados em {datetime.now().strftime('%d/%m/%Y %H:%M')}"
     log(f"Fazendo commit: {mensagem}")
-    subprocess.run(["git", "commit", "-m", mensagem], check=True)
+    result_commit = subprocess.run(
+        ["git", "commit", "-m", mensagem],
+        capture_output=True,
+        text=True
+    )
+    
+    if result_commit.returncode != 0:
+        log("ℹ️ Nenhuma alteração para commitar")
+        return
     
     # Push
     log("Enviando para GitHub...")
